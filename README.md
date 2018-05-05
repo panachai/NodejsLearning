@@ -1,5 +1,8 @@
 #RUN use -> nodemon app.js
 
+#ADD TOOL
+- npm install mysql
+
 #ADD NPM
 - npm init --yes
 - npm i express

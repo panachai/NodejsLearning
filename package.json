@@ -5,7 +5,8 @@
   "dependencies": {
     "create-node-project": "^1.0.2",
     "express": "^4.16.3",
-    "joi": "^13.2.0"
+    "joi": "^13.2.0",
+    "mysql": "^2.15.0"
   },
   "devDependencies": {},
   "scripts": {
