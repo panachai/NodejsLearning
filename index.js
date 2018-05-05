@@ -1,3 +1,4 @@
+const Joi = require('joi');
 const express = require('express');
 const app = express();
 
@@ -31,6 +32,12 @@ app.get('/api/product/:id', (req, res) => {
 
 //Post Add
 app.post('/api/product', (req, res) => {
+    if (!req.doby.name || req.body.name.length < 3) {
+        //400 Bad Request
+        res.status(400).send('Name is required and should be minimum 3 characters.')
+        return;
+    }
+
     const product = {
         id: products.length + 1,
         name: req.body.name
