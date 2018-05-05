@@ -26,7 +26,7 @@ app.get('/api/product', (req, res) => {
 //Get by ID
 app.get('/api/product/:id', (req, res) => {
     const product = products.find(c => c.id === parseInt(req.params.id));
-    if (!product) { res.status(404).send('The product with the given ID was not found.') }
+    if (!product) return res.status(404).send('The product with the given ID was not found.');
     res.send(product);
 });
 
@@ -34,11 +34,7 @@ app.get('/api/product/:id', (req, res) => {
 app.post('/api/product', (req, res) => {
     // If invalid, return 400 - Bad request
     const { error } = validateProduct(req.body); // result.error
-    if (error) {
-        //400 Bad Request
-        res.status(400).send(result.error.details[0].message)
-        return;
-    }
+    if (error) return res.status(400).send(error.details[0].message);
 
     const product = {
         id: products.length + 1,
@@ -52,15 +48,11 @@ app.post('/api/product', (req, res) => {
 app.put('/api/product/:id', (req, res) => {
     // If not existing , return 404
     const product = products.find(c => c.id === parseInt(req.params.id));
-    if (!product) { res.status(404).send('The product with the given ID was not found.') }
+    if (!product) return res.status(404).send('The product with the given ID was not found.')
 
     // If invalid, return 400 - Bad request
     const { error } = validateProduct(req.body); // result.error
-    if (error) {
-        //400 Bad Request
-        res.status(400).send(error.details[0].message)
-        return;
-    }
+    if (error) return res.status(400).send(error.details[0].message);
 
     //Update product
     product.name = req.body.name
@@ -72,12 +64,12 @@ app.put('/api/product/:id', (req, res) => {
 app.delete('/api/product/:id', (req, res) => {
     // If not existing , return 404
     const product = products.find(c => c.id === parseInt(req.params.id));
-    if (!product) { res.status(404).send('The product with the given ID was not found.') }
+    if (!product) return res.status(404).send('The product with the given ID was not found.');
 
     const index = products.indexOf(product);
     products.splice(index, 1);
 
-    res.send(product); 
+    res.send(product);
 });
 
 function validateProduct(product) {
