@@ -1,4 +1,4 @@
-#RUN use -> nodemon index.js
+#RUN use -> nodemon app.js
 
 #ADD NPM
 - npm init --yes
