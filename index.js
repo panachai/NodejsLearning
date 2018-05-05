@@ -32,9 +32,16 @@ app.get('/api/product/:id', (req, res) => {
 
 //Post Add
 app.post('/api/product', (req, res) => {
-    if (!req.doby.name || req.body.name.length < 3) {
+    const schema = {
+        name: Joi.string().min(3).required()
+    };
+
+    const result = Joi.validate(req.body, schema);
+    console.log(result);
+
+    if (result.error) {
         //400 Bad Request
-        res.status(400).send('Name is required and should be minimum 3 characters.')
+        res.status(400).send(result.error.details[0].message)
         return;
     }
 
