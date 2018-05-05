@@ -32,14 +32,9 @@ app.get('/api/product/:id', (req, res) => {
 
 //Post Add
 app.post('/api/product', (req, res) => {
-    const schema = {
-        name: Joi.string().min(3).required()
-    };
-
-    const result = Joi.validate(req.body, schema);
-    console.log(result);
-
-    if (result.error) {
+    // If invalid, return 400 - Bad request
+    const { error } = validateProduct(req.body); // result.error
+    if (error) {
         //400 Bad Request
         res.status(400).send(result.error.details[0].message)
         return;
@@ -52,6 +47,35 @@ app.post('/api/product', (req, res) => {
     products.push(product);
     res.send(product);
 });
+
+//Put Update
+app.put('/api/product/:id', (req, res) => {
+    // If not existing , return 404
+    const product = products.find(c => c.id === parseInt(req.params.id));
+    if (!product) { res.status(404).send('The product with the given ID was not found.') }
+
+    // If invalid, return 400 - Bad request
+    const { error } = validateProduct(req.body); // result.error
+    if (error) {
+        //400 Bad Request
+        res.status(400).send(error.details[0].message)
+        return;
+    }
+
+    //Update product
+    product.name = req.body.name
+
+    //return product new
+    res.send(product);
+});
+
+function validateProduct(product) {
+    const schema = {
+        name: Joi.string().min(3).required()
+    };
+
+    return Joi.validate(product, schema);
+}
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Listenning on port ${port}...`));
